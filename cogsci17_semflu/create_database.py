@@ -20,9 +20,16 @@ path = os.path.join(
 
 animals_path = os.path.join(
     os.path.dirname(__file__), os.pardir, 'animal_data',
-    'animal_words_fan.txt')
+    'animal_words.txt')
 
 animal_words = [w.upper().strip() for w in open(animals_path, 'r').readlines()]
+
+animal_words.append('ANIMAL')
+
+# remove animals which do not have any associations with other animal words in
+# FAN
+animal_words.remove('DEVIL')
+animal_words.remove('SPONGE')
 
 
 def create_fan_db():
@@ -32,7 +39,8 @@ def create_fan_db():
     f_name = 'fan_db.pkl'
     fan.save_assoc_db(os.path.join(path, f_name), words, assoc_db)
     am, i2w, w2i = fan.get_assoc_mat(
-        words, assoc_db, usewords=animal_words+['ANIMAL'], normalize=True)
+        words, assoc_db, usewords=animal_words,
+        normalize=True)
 
     fan.save_assoc_mat(path, 'fan_mat', am, i2w, w2i)
 
